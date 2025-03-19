@@ -131,4 +131,3 @@ print_stars
 
 # Логирование
 exec > >(tee -i "$LOGDIR/$PROJECT_NAME.logs") 2>&1
-
