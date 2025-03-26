@@ -2,7 +2,7 @@
 
 #--------------------------------------------------------------------
 # Script for timed restart of Cartman worker in crone
-# Скрипт ->
+# Скрипт для перезапуска docker-контейнера по времени в crontab ->
 # - перезапускает docker-контейнер CONTAINER_NAME и
 # - пишет сообщения в логи LOG_FILE
 # Tested on Ubuntu 24.04.1 LTS
