@@ -1,0 +1,6 @@
+# Файлы среды разработки
+.vscode/
+.idea/
+.classpath
+.project
+.settings/
