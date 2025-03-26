@@ -4,3 +4,7 @@
 .classpath
 .project
 .settings/
+
+# Логи и переменные окружения
+*.log
+*.env
