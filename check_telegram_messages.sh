@@ -19,7 +19,7 @@
 # TIMESTAMP_HOST_FILE
 # Время, за которое ищется сообщение об аудите ->
 # TIME_DELTA
-# Конфигурационный файл, где хранятся все переменные
+# Конфигурационный файл, где хранятся все переменные ->
 # CONFIG_FILE
 
 
@@ -45,7 +45,7 @@ fi
 : "${TIMESTAMP_HOST_FILE:?Переменная TIMESTAMP_HOST_FILE не задана}"
 : "${TIME_DELTA:?Переменная TIME_DELTA не задана}"
 
-# Функция для отправки сообщения в Telegram
+# Функция для отправки сообщения в Telegram:q
 send_telegram_warning_message() {
     local message="$1"
     local url="https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"

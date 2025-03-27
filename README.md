@@ -1,5 +1,11 @@
 # scripts
 
+Все переменные окружения для скриптов лежат в `config.env` корневой папки `scripts`.
+
+Сделать скрипт исполняемым:
+```bash
+chmod +x <script_name>.sh
+```
 
 ## 1. **Script to Deployment Projects**
 
@@ -14,6 +20,7 @@
 - _Токен и ID телеграм-канала_ - `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`
 - _Директория, где будет собираться образ_ - `WORKDIR="/path/to/workdir/"`
 - _Имя проекта_ - `PROJECT_NAME="<project_name>"`
+- _Конфигурационный файл, где хранятся все переменные_ - `CONFIG_FILE`
 
 Пример запуск по времени деплоя проекта:
 ```bash
@@ -36,11 +43,11 @@ echo "/path/to/scripts/redeploy.sh /path/to/scripts/config.env >> /path/to/scrip
 
 Пример запуска скрипта в crontab:
 ```bash
-0 9 * * * TIMESTAMP_HOST_FILE="/path/to/project_name/project_timestamp_file.txt" /path/to/scripts/check_telegram_messages.sh /path/to/project/.env >> /path/to/scripts/check_telegram_messages.log 2>&1
+0 9 * * * /path/to/scripts/check_telegram_messages.sh /path/to/scripts/config.env >> /path/to/scripts/check_telegram_messages.log 2>&1
 ```
 
 
-## 3. **Script for timed restart of Cartman worker in crone**
+## 3. **Script for timed restart of docker container in crone**
 
 **Скрипт для перезапуска docker-контейнера по времени в crontab** ->
 - перезапускает docker-контейнер `CONTAINER_NAME` и
@@ -50,9 +57,12 @@ echo "/path/to/scripts/redeploy.sh /path/to/scripts/config.env >> /path/to/scrip
 - _Имя контейнера_ - `CONTAINER_NAME="<container_name>"`
 - _Путь до LOG_FILE_ - `LOG_FILE="/path/to/logs/"`
 
-Пример запуска скрипта в crontab:
+Частный случай - скрипт **Script for timed restart of Cartman worker in crone** - перезапускает
+docker-контейнер worker проекта **Cartman**.
+
+Пример запуска скрипта для проекта **Cartman** в crontab:
 ```bash
-0 6 * * * LOG_FILE="/path/to/scripts/restart_cartman_worker.log" /path/to/scripts/restart_cartman_worker.sh /path/to/project/.env >> /path/to/scripts/restart_cartman_worker.log 2>&1
+0 6 * * * /path/to/scripts/restart_cartman_worker.sh /path/to/scripts/config.env >> /path/to/scripts/restart_cartman_worker.log 2>&1
 ```
 
 
@@ -63,14 +73,9 @@ echo "/path/to/scripts/redeploy.sh /path/to/scripts/config.env >> /path/to/scrip
 **Переменные для запуска скрипта**:
 - _Токен и ID телеграм-канала_ - `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`
 - _Путь до LOG_FILE_ - `LOG_FILE="/path/to/logs/"`
+- _Конфигурационный файл, где хранятся все переменные_ - `CONFIG_FILE`
 
 Пример запуска скрипта в crontab:
 ```bash
-0 6 * * * LOG_FILE="/path/to/scripts/restart_cartman_worker.log" /path/to/scripts/telegram_send_logs.sh /path/to/project/.env >> /path/to/scripts/telegram_send_logs.log 2>&1
-```
-
-
-Cделать скрипт исполняемым:
-```bash
-chmod +x <script_name>.sh
+0 6 * * * /path/to/scripts/telegram_send_logs.sh /path/to/scripts/config.env >> /path/to/scripts/telegram_send_logs.log 2>&1
 ```

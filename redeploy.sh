@@ -18,8 +18,13 @@
 # TELEGRAM_CHAT_ID
 # Директория, где будет собираться образ ->
 # WORKDIR
+# Директория docker-registry ->
+# DOCKER_REGISTRY
 # Имя проекта ->
 # PROJECT_NAME
+# Конфигурационный файл, где хранятся все переменные ->
+# CONFIG_FILE
+
 
 # Проверка наличия аргумента
 if [ "$#" -ne 1 ]; then
@@ -85,12 +90,12 @@ echo "Перешли в директорию $WORKDIR."
 print_stars
 
 # Удаление образа Docker
-echo "Удаляем образ docker-registry.km-union.ru/$PROJECT_NAME:"
+echo "Удаляем образ $DOCKER_REGISTRY/$PROJECT_NAME:"
 
-if docker rmi docker-registry.km-union.ru/$PROJECT_NAME; then
-    echo "Образ docker-registry.km-union.ru/$PROJECT_NAME успешно удален."
+if docker rmi $DOCKER_REGISTRY/$PROJECT_NAME; then
+    echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME успешно удален."
 else
-    echo "Образ docker-registry.km-union.ru/$PROJECT_NAME не найден или не удалось удалить."
+    echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME не найден или не удалось удалить."
 fi
 print_stars
 
@@ -98,7 +103,7 @@ print_stars
 echo "Начинаем сборку образа $PROJECT_NAME:"
 
 if docker compose build; then
-    echo "Образ $PROJECT_NAME успешно собран." 
+    echo "Образ $PROJECT_NAME успешно собран."
     send_telegram_message "ℹ️  Образ $PROJECT_NAME успешно собран."
 else
     error_exit "Ошибка при сборке образа $PROJECT_NAME."
@@ -109,12 +114,12 @@ print_stars
 # Публикация образа
 echo "Публикуем образ $PROJECT_NAME в docker-registry:"
 
-if docker push docker-registry.km-union.ru/$PROJECT_NAME:latest; then
-    echo "Образ docker-registry.km-union.ru/$PROJECT_NAME:latest успешно опубликован."
-    send_telegram_message "ℹ️  Образ docker-registry.km-union.ru/$PROJECT_NAME:latest успешно опубликован."
+if docker push $DOCKER_REGISTRY/$PROJECT_NAME:latest; then
+    echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest успешно опубликован."
+    send_telegram_message "ℹ️  Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest успешно опубликован."
 else
-    error_exit "Ошибка при публикации образа: docker-registry.km-union.ru/$PROJECT_NAME:latest."
-    send_telegram_message "❌ Ошибка при публикации образа: docker-registry.km-union.ru/$PROJECT_NAME:latest."
+    error_exit "Ошибка при публикации образа: $DOCKER_REGISTRY/$PROJECT_NAME:latest."
+    send_telegram_message "❌ Ошибка при публикации образа: $DOCKER_REGISTRY/$PROJECT_NAME:latest."
 fi
 print_stars
 
