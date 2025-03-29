@@ -16,10 +16,28 @@
 # Путь до LOG_FILE
 # LOG_FILE="/path/to/logs/"
 
+# Проверка наличия аргумента
+if [ "$#" -ne 1 ]; then
+    echo "Использование: $0 путь_к_конфигурационному_файлу" >&2
+    exit 1
+fi
+
+CONFIG_FILE="$1"
+
+# Загрузка переменных из файла конфигурации
+if [ -f "$CONFIG_FILE" ]; then
+    . "$CONFIG_FILE"
+else
+    echo "Файл конфигурации $CONFIG_FILE не найден." >&2
+    exit 1
+fi
+
+# Проверка обязательных переменных
+: "${CONTAINER_NAME:?Переменная CONTAINER_NAME не задана}"
 
 # Функция для логирования с временной меткой
 log_with_timestamp() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
 }
 
 # Попытка перезапуска контейнера
