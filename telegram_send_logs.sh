@@ -13,6 +13,8 @@
 # TELEGRAM_CHAT_ID
 # Путь до LOG_FILE ->
 # LOG_FILE="/path/to/logs/"
+# Название контейнера
+# CONTAINER_NAME
 # Конфигурационный файл, где хранятся все переменные ->
 # CONFIG_FILE
 
@@ -35,7 +37,8 @@ fi
 # Проверка обязательных переменных
 : "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
 : "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
-
+: "${LOG_FILE:?Переменная LOG_FILE не задана}"
+: "${CONTAINER_NAME:?Переменная CONTAINER_NAME не задана}"
 
 # Проверка наличия переменной окружения с токеном Telegram
 if [ -z "$TELEGRAM_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
@@ -47,16 +50,28 @@ fi
 send_telegram_message() {
     local message="$1"
     local url="https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
-    curl -s -X POST "$url" -d "chat_id=$TELEGRAM_CHAT_ID&text=$message"
+    curl -s -X POST "$url" \
+            --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" \
+            --data-urlencode "text=$message" \
+            --data-urlencode "parse_mode=MarkdownV2"
 }
 
 # Отправка содержимого лог-файла в Telegram
 if [ -f "$LOG_FILE" ]; then
+    last_line=""  # Переменная для хранения последней строки
     while IFS= read -r line; do
-        send_telegram_message "$line"
+        last_line="$line"  # Сохраняем последнюю строку
     done < "$LOG_FILE"
-    echo "Все логи $LOG_FILE успешно отправлены в Telegram: $(date)"
+
+    message_content="ℹ️  Последняя запись в логе рестарта контейнера - $CONTAINER_NAME:\n $last_line"
+
+    # Экранирование символов для MarkdownV2
+    message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
+
+    echo "$message_content"
+    send_telegram_message "$message_content"
 else
-    echo "$(date) ❌ Лог-файл не найден ❌"
-    send_telegram_message "$(date) Лог-файл $LOG_FILE не найден."
+    echo "$(date) Restart $CONTAINER_NAME не был произведен. Лог-файл $LOG_FILE не найден."
+    send_telegram_message "$(date) ❌ Restart $CONTAINER_NAME не был произведен. ⚠️  Лог-файл $LOG_FILE не найден. 🔔"
 fi
+

@@ -46,6 +46,7 @@ fi
 : "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
 : "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
 : "${WORKDIR:?Переменная WORKDIR не задана}"
+: "${DOCKER_REGISTRY:?Переменная DOCKER_REGISTRY не задана}"
 : "${PROJECT_NAME:?Переменная PROJECT_NAME не задана}"
 
 # Функция для отправки сообщения в Telegram
@@ -72,11 +73,11 @@ print_stars() {
 
 print_stars
 echo "-*-*-*-START-*-*-*-"
-send_telegram_message "ℹ️  Запуск скрипта проекта $PROJECT_NAME: $(date)"
+send_telegram_message "ℹ️  Запуск скрипта проекта $PROJECT_NAME: $(date '+%Y-%m-%d %H:%M:%S')"
 print_stars
 
 # Вывод даты и времени начала выполнения скрипта
-echo "Скрипт запущен: $(date)"
+echo "Скрипт запущен: $(date '+%Y-%m-%d %H:%M:%S')"
 print_stars
 
 # Переход в директорию
@@ -124,14 +125,14 @@ fi
 print_stars
 
 # Вывод даты и времени завершения выполнения скрипта
-echo "Скрипт проекта $PROJECT_NAME завершен: $(date)"
+echo "Скрипт проекта $PROJECT_NAME завершен: $(date '+%Y-%m-%d %H:%M:%S')"
 print_stars
 
 echo "Скрипт выполнен успешно!"
 
 print_stars
 echo ":) END :)"
-send_telegram_message "✅ Скрипт проекта $PROJECT_NAME успешно выполнен: $(date)!"
+send_telegram_message "✅ Скрипт проекта $PROJECT_NAME успешно выполнен: $(date '+%Y-%m-%d %H:%M:%S')!"
 print_stars
 
 # Логирование

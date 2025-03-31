@@ -11,7 +11,7 @@
 
 # Переменные для запуска скрипта:
 # Имя контейнера
-# CONTAINER_NAME="<container_name>"
+# CONTAINER_NAME
 # Путь до LOG_FILE
 # LOG_FILE="/path/to/logs/"
 # Конфигурационный файл, где хранятся все переменные ->
@@ -46,8 +46,8 @@ fi
 # Проверка обязательных переменных
 : "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
 : "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
-: "${TIMESTAMP_HOST_FILE:?Переменная TIMESTAMP_HOST_FILE не задана}"
-: "${TIME_DELTA:?Переменная TIME_DELTA не задана}"
+: "${CONTAINER_NAME:?Переменная CONTAINER_NAME не задана}"
+: "${LOG_FILE:?Переменная LOG_FILE не задана}"
 
 # Функция для отправки сообщения в Telegram
 send_telegram_message() {

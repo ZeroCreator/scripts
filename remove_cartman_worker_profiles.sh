@@ -1,21 +1,11 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------
-# Script to remove /profiles/* from cartman-worker-1
+# Script to remove /profiles/* from cartman-worker
 # Скрипт для удаления /profiles/* из docker-контейнера worker проекта **CARTMAN**
 # по времени в crontab каждый час ->
 # - удаляет /profiles/* 4 REPEAT_COUNT раза из docker-контейнер worker
-# Tested on Ubuntu 24.04.1 LTS
-# Developed by Olga Shkola in 2025
-#--------------------------------------------------------------------
-
-#!/bin/bash
-
-#--------------------------------------------------------------------
-# Script to remove /profiles/* from cartman-worker-1
-# Скрипт для удаления /profiles/* из docker-контейнера worker проекта **CARTMAN**
-# по времени в crontab каждый час ->
-# - удаляет /profiles/* 4 REPEAT_COUNT раза из docker-контейнер worker
+# - отправляет сообщение в telegram
 # Tested on Ubuntu 24.04.1 LTS
 # Developed by Olga Shkola in 2025
 #--------------------------------------------------------------------
@@ -78,11 +68,11 @@ for ((i = 1; i <= REPEAT_COUNT; i++)); do
     echo -e "Запуск $i из $REPEAT_COUNT: Размер профилей до удаления: $size_before, после удаления: $size_after"
 
     # Формирование сообщения
-    #message_content+="Запуск $i из $REPEAT_COUNT: Размер профилей до удаления: $size_before, после удаления: $size_after\n\n"
+    message_content+="Запуск $i из $REPEAT_COUNT: Размер профилей до удаления: $size_before, после удаления: $size_after\n"
 done
 
 # Экранирование символов для MarkdownV2
-#message_content=$(echo -e "$message_content" | sed 's/[_*`]/\\&/g')
+message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
 
 # Отправка сообщения в Telegram
-#send_telegram_message "$message_content"
+send_telegram_message "$message_content"
