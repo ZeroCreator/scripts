@@ -1,4 +1,4 @@
-# SCRIPTS
+# SCRIPTS 🪄
 
 ## 1. **Script to Deployment Projects** (_redeploy.sh_)
 
@@ -90,6 +90,26 @@ echo "/path/to/scripts/redeploy.sh /path/to/scripts/config.env >> /path/to/scrip
 Пример запуска скрипта в **crontab**:
 ```bash
 0 * * * * /path/to/scripts/remove_cartman_worker_profiles.sh /path/to/scripts/config.env >> /path/to/scripts/remove_cartman_worker_profiles.log 2>&1
+```
+
+---
+## 6. **Script _proxy scheduler_**
+
+**Скрипт для отправки оповещения о времени оплаты прокси-адресов**
+- получает первоначальную и текущую даты,
+- проверяет, прошло ли 30 дней,
+- отправляет сообщения в telegram-канал
+
+**Переменные для запуска скрипта**:
+- _Токен и ID телеграм-канала_ - `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`
+- - _Путь до файла с датой DATE_FILE_ - `DATE_FILE="/path/to/logs/"`
+- _Первоначальная дата_ - `PAST_DATE`
+- _Сообщение в telegram_ - `MESSAGE`
+- _Конфигурационный файл, где хранятся все переменные_ - `CONFIG_FILE`
+
+Пример запуска скрипта в **crontab**:
+```bash
+0 10 * * * /path/to/scripts/proxy scheduler.sh /path/to/scripts/config.env >> /path/to/scripts/proxy scheduler.log 2>&1
 ```
 
 ---
