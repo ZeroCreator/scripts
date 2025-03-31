@@ -72,3 +72,18 @@ send_telegram_message "$message_content"
 ```
 
 ---
+4️⃣.  Экранирование символов для MarkdownV2:
+
+message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
+
+---
+
+5️⃣.  Формат времени:
+
+получить текущую дату в формате "YYYY-MM-DD h:m:s"
+
+`$(date '+%Y-%m-%d %H:%M:%S')`
+
+или получить текущую дату в формате "YYYY-MM-DD"
+
+`$(date '+%Y-%m-%d')`
