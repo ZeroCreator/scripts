@@ -63,15 +63,22 @@ if [ -f "$LOG_FILE" ]; then
         last_line="$line"  # Сохраняем последнюю строку
     done < "$LOG_FILE"
 
-    message_content="ℹ️  Последняя запись в логе рестарта контейнера - $CONTAINER_NAME:\n $last_line"
+    log_date=$(echo "$last_line" | awk '{print $1}')  # Извлекаем дату из первой колонки
+    current_date=$(date +%Y-%m-%d)  # Получаем текущую дату в формате "YYYY-MM-DD"
 
-    # Экранирование символов для MarkdownV2
-    message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
-
-    echo "$message_content"
-    send_telegram_message "$message_content"
+    if [ "$log_date" != "$current_date" ]; then
+        # Если дата в логе не соответствует текущей дате, отправляем предупреждение
+        warning_message="⚠️ Внимание! \nПоследняя запись в логе контейнера $CONTAINER_NAME была сделана \n$log_date, \nа не сегодня ➡️ \n($current_date)."
+        # Экранирование символов для MarkdownV2
+        warning_message=$(echo -e "$warning_message" | sed 's/[_*`.,-]/\\&/g')
+        send_telegram_message "$warning_message"
+    else
+        message_content="ℹ️ Последняя запись в логе контейнера \n$CONTAINER_NAME ➡️ \n$last_line"
+        # Экранирование символов для MarkdownV2
+        message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
+        send_telegram_message "$message_content"
+    fi
 else
-    echo "$(date) Restart $CONTAINER_NAME не был произведен. Лог-файл $LOG_FILE не найден."
-    send_telegram_message "$(date) ❌ Restart $CONTAINER_NAME не был произведен. ⚠️  Лог-файл $LOG_FILE не найден. 🔔"
+    echo "$(date) Лог-файл $LOG_FILE не найден."
+    send_telegram_message "$(date '+%Y-%m-%d %H:%M:%S') ❌ Лог-файл $LOG_FILE не найден."
 fi
-
