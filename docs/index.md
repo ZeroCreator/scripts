@@ -1,5 +1,13 @@
 # ВВЕДЕНИЕ
 
+```
+SSSSSSS    CCCCCC   RRRRRR    IIIII   PPPPPP   TTTTTTT  SSSSSSS
+S         C         R     R     I     P     P     T     S
+ SSSSS    C         RRRRRR      I     PPPPPP      T      SSSSS
+      S   C         R   R       I     P           T           S
+SSSSSSS    CCCCCC   R    R    IIIII   P           T     SSSSSSS
+``` 
+
 🚀 **Scripts** - пакет скриптов и документации для DevOps-сопровождения проектов.
 
 ---
