@@ -10,3 +10,6 @@
 *.env
 *venv
 *env
+
+# Директория `site` для GitHub Pages
+site/
