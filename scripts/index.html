@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.10">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
     
     
       
@@ -144,11 +144,13 @@
     
     
     
-      <label class="md-header__button md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-      </label>
-      <div class="md-search" data-md-component="search" role="dialog">
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
@@ -187,6 +189,7 @@
     </div>
   </div>
 </div>
+      
     
     
   </nav>
@@ -374,45 +377,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-script-to-deployment-projects-redeploysh" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Script to Deployment Projects (redeploy.sh)
+      1. Скрипт для деплоя проектов
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-script-to-check-cartman-project-audit-check_telegram_messagessh" class="md-nav__link">
+  <a href="#2-telegram" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Script to check Cartman Project audit (check_telegram_messages.sh)
+      2. Скрипт для проверки отправления сообщений в telegram
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-script-for-timed-restart-of-docker-container-in-crone-restart_docker_containersh" class="md-nav__link">
+  <a href="#3-docker-crontab" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Script for timed restart of docker container in crone (restart_docker_container.sh)
+      3. Скрипт для перезапуска docker-контейнера по времени в crontab
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-script-for-sending-logs-to-telegram-telegram_send_logssh" class="md-nav__link">
+  <a href="#4-telegram-" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Script for sending logs to telegram (telegram_send_logs.sh)
+      4. Скрипт для отправки логов в telegram-канал
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-script-to-remove-profiles-from-cartman-worker-remove_cartman_worker_profilessh" class="md-nav__link">
+  <a href="#5-profiles-docker-worker-cartman" class="md-nav__link">
     <span class="md-ellipsis">
-      5. Script to remove /profiles/ from cartman-worker (remove_cartman_worker_profiles.sh)
+      5. Скрипт для удаления /profiles/ из docker-контейнера worker проекта CARTMAN
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Скрипт для отправки оповещения о времени оплаты прокси-адресов
     </span>
   </a>
   
@@ -475,45 +487,54 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-script-to-deployment-projects-redeploysh" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
-      1. Script to Deployment Projects (redeploy.sh)
+      1. Скрипт для деплоя проектов
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-script-to-check-cartman-project-audit-check_telegram_messagessh" class="md-nav__link">
+  <a href="#2-telegram" class="md-nav__link">
     <span class="md-ellipsis">
-      2. Script to check Cartman Project audit (check_telegram_messages.sh)
+      2. Скрипт для проверки отправления сообщений в telegram
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-script-for-timed-restart-of-docker-container-in-crone-restart_docker_containersh" class="md-nav__link">
+  <a href="#3-docker-crontab" class="md-nav__link">
     <span class="md-ellipsis">
-      3. Script for timed restart of docker container in crone (restart_docker_container.sh)
+      3. Скрипт для перезапуска docker-контейнера по времени в crontab
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-script-for-sending-logs-to-telegram-telegram_send_logssh" class="md-nav__link">
+  <a href="#4-telegram-" class="md-nav__link">
     <span class="md-ellipsis">
-      4. Script for sending logs to telegram (telegram_send_logs.sh)
+      4. Скрипт для отправки логов в telegram-канал
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-script-to-remove-profiles-from-cartman-worker-remove_cartman_worker_profilessh" class="md-nav__link">
+  <a href="#5-profiles-docker-worker-cartman" class="md-nav__link">
     <span class="md-ellipsis">
-      5. Script to remove /profiles/ from cartman-worker (remove_cartman_worker_profiles.sh)
+      5. Скрипт для удаления /profiles/ из docker-контейнера worker проекта CARTMAN
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Скрипт для отправки оповещения о времени оплаты прокси-адресов
     </span>
   </a>
   
@@ -535,73 +556,116 @@
 
 
 
-<h1 id="scripts">SCRIPTS</h1>
-<h2 id="1-script-to-deployment-projects-redeploysh">1. <strong>Script to Deployment Projects</strong> (<em>redeploy.sh</em>)</h2>
-<p><strong>Скрипт для деплоя проектов</strong> -&gt;
-- переходит в рабочую директорию проекта, 
-- удаляет старый образ,
-- собирает новый образ, 
-- публикует его в docker-registry и 
-- отправляет сообщения в telegram</p>
-<p><strong>Переменные для запуска скрипта</strong>:
-- <em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code>
-- <em>Директория, где будет собираться образ</em> - <code>WORKDIR="/path/to/workdir/"</code>
-- <em>Директория docker-registry</em> - <code>DOCKER_REGISTRY</code>
-- <em>Имя проекта</em> - <code>PROJECT_NAME</code>
-- <em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></p>
+<h1 id="scripts">SCRIPTS 🪄</h1>
+<h2 id="1">1. <strong>Скрипт для деплоя проектов</strong></h2>
+<p><strong>Script to Deployment Projects</strong> (<em>redeploy.sh</em>) -&gt;</p>
+<ul>
+<li>переходит в рабочую директорию проекта, </li>
+<li>удаляет старый образ,</li>
+<li>собирает новый образ, </li>
+<li>публикует его в docker-registry и </li>
+<li>отправляет сообщения в telegram</li>
+</ul>
+<p><strong>Переменные для запуска скрипта</strong>:</p>
+<ul>
+<li><em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></li>
+<li><em>Директория, где будет собираться образ</em> - <code>WORKDIR="/path/to/workdir/"</code></li>
+<li><em>Директория docker-registry</em> - <code>DOCKER_REGISTRY</code></li>
+<li><em>Имя проекта</em> - <code>PROJECT_NAME</code></li>
+<li><em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></li>
+</ul>
 <p>Пример запуск по времени деплоя проекта:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;/path/to/scripts/redeploy.sh /path/to/scripts/config.env &gt;&gt; /path/to/scripts/cartman_log.log 2&gt;&amp;1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>at<span class="w"> </span><span class="m">18</span>:26<span class="w"> </span><span class="m">2025</span>-03-24
 </span></code></pre></div></p>
 <hr />
-<h2 id="2-script-to-check-cartman-project-audit-check_telegram_messagessh">2. <strong>Script to check Cartman Project audit</strong> (<em>check_telegram_messages.sh</em>)</h2>
-<p><strong>Скрипт для проверки было ли отправлено сообщение в telegram</strong> -&gt;
-- получает время отправки последнего сообщения,
-- проверяет, что сообщение было сформировано не позднее <code>TIME_DELTA</code>,
-- отправляет сообщения о результатах в telegram</p>
-<p><strong>Переменные для запуска скрипта</strong>:
-- <em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code>
-- <em>Имя и путь до файла, где будет храниться время последнего сообщения об аудите</em> - <code>TIMESTAMP_HOST_FILE</code>
-- <em>Время, за которое ищется сообщение об аудите</em> - <code>TIME_DELTA</code>
-- <em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></p>
+<h2 id="2-telegram">2. <strong>Скрипт для проверки отправления сообщений в telegram</strong></h2>
+<p><strong>Script to check telegram messages</strong> (<em>check_telegram_messages.sh</em>) -&gt;</p>
+<ul>
+<li>получает время отправки последнего сообщения,</li>
+<li>проверяет, что сообщение было сформировано не позднее <code>TIME_DELTA</code>,</li>
+<li>отправляет сообщения о результатах в telegram</li>
+</ul>
+<p><strong>Переменные для запуска скрипта</strong>:</p>
+<ul>
+<li><em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></li>
+<li><em>Имя и путь до файла, где будет храниться время последнего сообщения об аудите</em> - <code>TIMESTAMP_HOST_FILE</code></li>
+<li><em>Время, за которое ищется сообщение об аудите</em> - <code>TIME_DELTA</code></li>
+<li><em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></li>
+</ul>
 <p>Пример запуска скрипта в <strong>crontab</strong>:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="m">0</span><span class="w"> </span><span class="m">9</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/path/to/scripts/check_telegram_messages.sh<span class="w"> </span>/path/to/scripts/config.env<span class="w"> </span>&gt;&gt;<span class="w"> </span>/path/to/scripts/check_telegram_messages.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
 </span></code></pre></div></p>
 <hr />
-<h2 id="3-script-for-timed-restart-of-docker-container-in-crone-restart_docker_containersh">3. <strong>Script for timed restart of docker container in crone</strong> (<em>restart_docker_container.sh</em>)</h2>
-<p><strong>Скрипт для перезапуска docker-контейнера по времени в crontab</strong> -&gt;
-- перезапускает docker-контейнер <code>CONTAINER_NAME</code> и
-- пишет сообщения в логи <code>LOG_FILE</code></p>
-<p><strong>Переменные для запуска скрипта</strong>:
-- <em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code>
-- <em>Имя контейнера</em> - <code>CONTAINER_NAME</code>
-- <em>Путь до LOG_FILE</em> - <code>LOG_FILE="/path/to/logs/"</code>
-- <em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></p>
+<h2 id="3-docker-crontab">3. <strong>Скрипт для перезапуска docker-контейнера по времени в crontab</strong></h2>
+<p><strong>Script for timed restart of docker container in crone</strong> (<em>restart_docker_container.sh</em>) -&gt;</p>
+<ul>
+<li>перезапускает docker-контейнер <code>CONTAINER_NAME</code> и</li>
+<li>пишет сообщения в логи <code>LOG_FILE</code></li>
+</ul>
+<p><strong>Переменные для запуска скрипта</strong>:</p>
+<ul>
+<li><em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></li>
+<li><em>Имя контейнера</em> - <code>CONTAINER_NAME</code></li>
+<li><em>Путь до LOG_FILE</em> - <code>LOG_FILE="/path/to/logs/"</code></li>
+<li><em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></li>
+</ul>
 <p>Частный случай - скрипт <strong>Script for timed restart of Cartman worker in crone</strong> (<em>restart_cartman_worker.sh</em>) 
 перезапускает docker-контейнер <strong>worker</strong> проекта <strong>Cartman</strong>.</p>
 <p>Пример запуска скрипта для проекта <strong>Cartman</strong> в <strong>crontab</strong>:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="m">0</span><span class="w"> </span><span class="m">6</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/path/to/scripts/restart_cartman_worker.sh<span class="w"> </span>/path/to/scripts/config.env<span class="w"> </span>&gt;&gt;<span class="w"> </span>/path/to/scripts/restart_cartman_worker.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
 </span></code></pre></div></p>
 <hr />
-<h2 id="4-script-for-sending-logs-to-telegram-telegram_send_logssh">4. <strong>Script for sending logs to telegram</strong> (<em>telegram_send_logs.sh</em>)</h2>
-<p><strong>Скрипт для отправки логов в telegram-канал</strong>
-- отправляет последнюю запись из LOG_FILE в telegram</p>
-<p><strong>Переменные для запуска скрипта</strong>:
-- <em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code>
-- <em>Путь до LOG_FILE</em> - <code>LOG_FILE="/path/to/logs/"</code>
-- <em>Название контейнера</em> - <code>CONTAINER_NAME</code>
-- <em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></p>
+<h2 id="4-telegram-">4. <strong>Скрипт для отправки логов в telegram-канал</strong></h2>
+<p><strong>Script for sending logs to telegram</strong> (<em>telegram_send_logs.sh</em>) -&gt;</p>
+<ul>
+<li>отправляет последнюю запись из LOG_FILE в telegram</li>
+</ul>
+<p><strong>Переменные для запуска скрипта</strong>:</p>
+<ul>
+<li><em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></li>
+<li><em>Путь до LOG_FILE</em> - <code>LOG_FILE="/path/to/logs/"</code></li>
+<li><em>Название контейнера</em> - <code>CONTAINER_NAME</code></li>
+<li><em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></li>
+</ul>
 <p>Пример запуска скрипта в <strong>crontab</strong>:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="m">0</span><span class="w"> </span><span class="m">6</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/path/to/scripts/telegram_send_logs.sh<span class="w"> </span>/path/to/scripts/config.env<span class="w"> </span>&gt;&gt;<span class="w"> </span>/path/to/scripts/telegram_send_logs.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
 </span></code></pre></div></p>
 <hr />
-<h2 id="5-script-to-remove-profiles-from-cartman-worker-remove_cartman_worker_profilessh">5. <strong>Script to remove /profiles/ from cartman-worker</strong> (<em>remove_cartman_worker_profiles.sh</em>)</h2>
-<p><strong>Скрипт для удаления /profiles/ из docker-контейнера worker проекта <em>CARTMAN</em></strong>
-- по времени в crontab каждый час удаляет /profiles/* 4 REPEAT_COUNT раза из docker-контейнер worker
-- отправляет сообщения в telegram</p>
-<p><strong>Переменные для запуска скрипта</strong>:
-- <em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></p>
+<h2 id="5-profiles-docker-worker-cartman">5. <strong>Скрипт для удаления /profiles/ из docker-контейнера worker проекта <em>CARTMAN</em></strong></h2>
+<p><strong>Script to remove /profiles/ from cartman-worker</strong> (<em>remove_cartman_worker_profiles.sh</em>) -&gt;</p>
+<ul>
+<li>по времени в crontab каждый час удаляет /profiles/* 4 REPEAT_COUNT раза из docker-контейнер worker</li>
+<li>отправляет сообщения в telegram</li>
+</ul>
+<p><strong>Переменные для запуска скрипта</strong>:</p>
+<ul>
+<li><em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></li>
+</ul>
 <p>Пример запуска скрипта в <strong>crontab</strong>:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="m">0</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/path/to/scripts/remove_cartman_worker_profiles.sh<span class="w"> </span>/path/to/scripts/config.env<span class="w"> </span>&gt;&gt;<span class="w"> </span>/path/to/scripts/remove_cartman_worker_profiles.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></code></pre></div></p>
+<hr />
+<h2 id="6-">6. <strong>Скрипт для отправки оповещения о времени оплаты прокси-адресов</strong></h2>
+<p><strong>Script <em>proxy scheduler</em></strong> -&gt;</p>
+<ul>
+<li>получает первоначальную и текущую даты,</li>
+<li>проверяет, прошло ли 30 дней,</li>
+<li>отправляет сообщения в telegram-канал</li>
+</ul>
+<p><strong>Переменные для запуска скрипта</strong>:</p>
+<ul>
+<li><em>Токен и ID телеграм-канала</em> - <code>TELEGRAM_TOKEN</code>, <code>TELEGRAM_CHAT_ID</code></li>
+<li>
+<ul>
+<li><em>Путь до файла с датой DATE_FILE</em> - <code>DATE_FILE="/path/to/logs/"</code></li>
+</ul>
+</li>
+<li><em>Первоначальная дата</em> - <code>PAST_DATE</code></li>
+<li><em>Сообщение в telegram</em> - <code>MESSAGE</code></li>
+<li><em>Конфигурационный файл, где хранятся все переменные</em> - <code>CONFIG_FILE</code></li>
+</ul>
+<p>Пример запуска скрипта в <strong>crontab</strong>:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="m">0</span><span class="w"> </span><span class="m">10</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/path/to/scripts/proxy<span class="w"> </span>scheduler.sh<span class="w"> </span>/path/to/scripts/config.env<span class="w"> </span>&gt;&gt;<span class="w"> </span>/path/to/scripts/proxy<span class="w"> </span>scheduler.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
 </span></code></pre></div></p>
 <hr />
 
