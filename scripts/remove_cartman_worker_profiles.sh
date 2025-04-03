@@ -4,7 +4,7 @@
 # Script to remove /profiles/* from cartman-worker
 # Скрипт для удаления /profiles/* из docker-контейнера worker проекта **CARTMAN**
 # по времени в crontab каждый час ->
-# - удаляет /profiles/* 4 REPEAT_COUNT раза из docker-контейнер worker
+# - удаляет /profiles/* REPEAT_COUNT раза из docker-контейнер worker
 # - отправляет сообщение в telegram
 # Tested on Ubuntu 24.04.1 LTS
 # Developed by Olga Shkola in 2025

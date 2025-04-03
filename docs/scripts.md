@@ -91,7 +91,7 @@ echo "/path/to/scripts/redeploy.sh /path/to/scripts/config.env >> /path/to/scrip
 
 **Script to remove /profiles/ from cartman-worker** (_remove_cartman_worker_profiles.sh_) ->
 
-- по времени в crontab каждый час удаляет /profiles/* 4 REPEAT_COUNT раза из docker-контейнер worker
+- по времени в crontab каждый час удаляет /profiles/* REPEAT_COUNT раза из docker-контейнера `worker`
 - отправляет сообщения в telegram
 
 **Переменные для запуска скрипта**:
