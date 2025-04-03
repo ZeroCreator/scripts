@@ -370,7 +370,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      Запуск скриптов по времени
+      ⏰ Запуск скриптов по времени
     </span>
   </a>
   
@@ -475,7 +475,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      Запуск скриптов по времени
+      ⏰ Запуск скриптов по времени
     </span>
   </a>
   
@@ -534,11 +534,11 @@ https://containrrr.dev/shoutrrr/v0.8/services/telegram/</p>
 <p>Вначале необходимо создать в папке проекта файл <strong>config.env</strong> с переменными окружения (<em>при первой установке приложения</em>):</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a># Переменные проекта
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>WORKDIR=/path/to/project
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>LOGDIR=/path/to/project/logs
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>LOGDIR=/path/to/logs
 </span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>PROJECT_NAME=project_name
 </span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
 </span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a># TELEGRAM
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>TELEGRAM_TOKEN=&quot;&lt;telegram-roken&gt;&quot;
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>TELEGRAM_TOKEN=&quot;&lt;telegram-token&gt;&quot;
 </span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>TELEGRAM_CHAT_ID=&quot;&lt;telegram_chat_id&gt;&quot;
 </span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a># Для скрипта redeploy
@@ -546,7 +546,7 @@ https://containrrr.dev/shoutrrr/v0.8/services/telegram/</p>
 </span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
 </span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a># Для остальных скриптов
 </span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>LOG_FILE=&quot;/path/to/log.log&quot;
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>CONTAINER_NAME=&quot;container_name&quot;
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>CONTAINER_NAME=&quot;&lt;container_name&gt;&quot;
 </span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>TIMESTAMP_HOST_FILE=&quot;/path/to/project_timestamp_file.txt&quot;
 </span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>TIME_DELTA=&lt;time_delta&gt;
 </span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
@@ -556,7 +556,7 @@ https://containrrr.dev/shoutrrr/v0.8/services/telegram/</p>
 </span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>PAST_DATE=&quot;&lt;past_date&gt;&quot;
 </span></code></pre></div>
 <hr />
-<h2 id="_3">Запуск скриптов по времени</h2>
+<h2 id="_3">⏰ Запуск скриптов по времени</h2>
 <p>Для запуска скриптов по времени ипользуется <strong>crontab</strong> и утилита Linux <strong>at</strong>.</p>
 <p>Примеры запуска скриптов с помощью утилиты <strong>at</strong>:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;/path/to/scripts/script_name.sh /path/to/scripts/config.env &gt;&gt; /path/to/scripts/script_log.log 2&gt;&amp;1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>at<span class="w"> </span>&lt;h&gt;:&lt;m&gt;<span class="w"> </span>&lt;YY&gt;-&lt;m&gt;-&lt;d&gt;
