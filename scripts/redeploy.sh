@@ -124,6 +124,9 @@ else
 fi
 print_stars
 
+# Логирование
+exec > >(tee -i "$LOGDIR/$PROJECT_NAME.logs") 2>&1
+
 # Вывод даты и времени завершения выполнения скрипта
 echo "Скрипт проекта $PROJECT_NAME завершен: $(date '+%Y-%m-%d %H:%M:%S')"
 print_stars
@@ -134,6 +137,3 @@ print_stars
 echo ":) END :)"
 send_telegram_message "✅ Скрипт проекта $PROJECT_NAME успешно выполнен: $(date '+%Y-%m-%d %H:%M:%S')!"
 print_stars
-
-# Логирование
-exec > >(tee -i "$LOGDIR/$PROJECT_NAME.logs") 2>&1
