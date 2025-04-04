@@ -506,26 +506,29 @@
 </span></code></pre></div>
 <p>🚀 <strong>Scripts</strong> - пакет скриптов и документации для DevOps-сопровождения проектов.</p>
 <hr />
-<p>➡️ ⚠️ Все переменные окружения для работы скриптов лежат в <code>config.env</code> корневой папки <code>scripts</code>.</p>
-<p>➡️ 🪛 Сделать скрипт исполняемым:
+<p>⚠️ Все переменные окружения для работы скриптов лежат в <code>config.env</code> корневой папки <code>scripts</code>.</p>
+<hr />
+<p>🪛 Сделать скрипт исполняемым: ➡️
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>&lt;script_name&gt;.sh
 </span></code></pre></div></p>
-<p>➡️ 🔌 <strong>URL Format</strong> для переменной <strong>telegram</strong>:</p>
+<hr />
+<p>🔌 <strong>URL Format</strong> для переменной <strong>telegram</strong>: ➡️</p>
 <p><code>telegram://token@telegram?chats=channel-1[,chat-id-1,...]</code></p>
-<p>➡️ ✈️ Эмодзи, используемые для сообщений в telegram:</p>
+<hr />
+<p>✈️ Эмодзи, используемые для сообщений в telegram: ➡️</p>
 <p>ℹ️ ⚠️ ❌ ✅ ✈️ 🤬 🔔 🚀</p>
 <hr />
 <h2 id="telegram">📢 Команды для telegram:</h2>
-<p>1️⃣.  🔬 Узнать <strong>ID</strong> канала ➡️</p>
+<p>1️⃣.  🔬 Узнать <strong>ID</strong> канала: ➡️</p>
 <p>https://api.telegram.org/bot{TOKEN}/getUpdates</p>
-<p>2️⃣.  🏌️‍♀️ Отправка сообщений для тестирования:
+<p>2️⃣.  🏌️‍♀️ Отправка сообщений для тестирования: ➡️
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;https://api.telegram.org/bot</span><span class="nv">$TELEGRAM_TOKEN</span><span class="s2">/sendMessage&quot;</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;chat_id=</span><span class="nv">$CHAT_ID</span><span class="s2">&amp;text=</span><span class="nv">$MESSAGE</span><span class="s2">&quot;</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">&quot;https://api.telegram.org/bot</span><span class="nv">$TELEGRAM_TOKEN</span><span class="s2">/sendMessage&quot;</span><span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;chat_id=</span><span class="nv">$CHAT_ID</span><span class="s2">&amp;text=Тестовое сообщение&quot;</span>
 </span></code></pre></div></p>
-<p>3️⃣.  👀 Смотреть логи в реальном времени:
+<p>3️⃣.  👀 Смотреть логи в реальном времени: ➡️
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$<span class="w"> </span>tail<span class="w"> </span>-f<span class="w"> </span>~/scripts/&lt;script_name&gt;.log
 </span></code></pre></div></p>
-<p>5️⃣.  👣 <strong>Shoutrrr</strong> - для просмотра доступных по <strong>TELEGRAM_TOKEN</strong> <em>telegram-каналов</em>:
+<p>5️⃣.  👣 <strong>Shoutrrr</strong> - для просмотра доступных по <strong>TELEGRAM_TOKEN</strong> <em>telegram-каналов</em>: ➡️
 https://containrrr.dev/shoutrrr/v0.8/services/telegram/</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>containrrr/shoutrrr<span class="w"> </span>generate<span class="w"> </span>telegram
 </span></code></pre></div>
