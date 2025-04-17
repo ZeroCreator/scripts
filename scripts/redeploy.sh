@@ -90,17 +90,30 @@ cd $WORKDIR || error_exit "Не удалось перейти в директо�
 echo "Перешли в директорию $WORKDIR."
 print_stars
 
-# Удаление образа Docker
-echo "Удаляем образ $DOCKER_REGISTRY/$PROJECT_NAME:"
+# Получение ID образа с тегом latest
+IMAGE_ID=$(docker images -q $DOCKER_REGISTRY/$PROJECT_NAME:latest)
 
-if docker rmi $DOCKER_REGISTRY/$PROJECT_NAME; then
-    echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME успешно удален."
+if [ -n "$IMAGE_ID" ]; then
+    # Получение даты создания образа
+    CREATION_DATE=$(docker inspect --format='{{.Created}}' $IMAGE_ID)
+
+    # Преобразование даты создания в формат "YYYY-MM-DD H:M:S"
+    CREATION_DATE_FORMATTED=$(date -d "$CREATION_DATE" "+%Y-%m-%d-%H-%M-%S")
+
+    # Создание нового тега с датой создания
+    NEW_TAG="$DOCKER_REGISTRY/$PROJECT_NAME:$CREATION_DATE_FORMATTED"
+
+    # Переименование образа с новым тегом
+    if docker tag $IMAGE_ID $NEW_TAG; then
+        echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest переименован в $NEW_TAG."
+    else
+        echo "Не удалось переименовать образ $DOCKER_REGISTRY/$PROJECT_NAME:latest."
+    fi
 else
-    echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME не найден или не удалось удалить."
+  echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest не найден."
 fi
-print_stars
 
-# Сборка образов
+# Сборка нового образа с тегом latest
 echo "Начинаем сборку образа $PROJECT_NAME:"
 
 if docker compose build; then
@@ -109,7 +122,9 @@ if docker compose build; then
 else
     error_exit "Ошибка при сборке образа $PROJECT_NAME."
     send_telegram_message "❌ Ошибка при сборке образа $PROJECT_NAME."
+    exit 1
 fi
+
 print_stars
 
 # Публикация образа
@@ -121,6 +136,7 @@ if docker push $DOCKER_REGISTRY/$PROJECT_NAME:latest; then
 else
     error_exit "Ошибка при публикации образа: $DOCKER_REGISTRY/$PROJECT_NAME:latest."
     send_telegram_message "❌ Ошибка при публикации образа: $DOCKER_REGISTRY/$PROJECT_NAME:latest."
+    exit 1
 fi
 print_stars
 
@@ -137,4 +153,3 @@ print_stars
 
 # Логирование
 exec > >(tee -i "$LOGDIR/$PROJECT_NAME.logs") 2>&1
-
