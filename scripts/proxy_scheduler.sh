@@ -78,5 +78,7 @@ if [ "$DIFF" -ge 2592000 ]; then
     echo "$(date +%Y-%m-%d)" > "$DATE_FILE"
     echo "Сообщение отправлено. Обновляем дату последней отправки - $(date +%Y-%m-%d)"
 else
-    :
+    # Рассчитываем количество дней до оплаты proxy
+    DAYS_REMAINING=$((30 - (DIFF / 86400)))  # 86400 секунд в сутках
+    echo "Осталось $DAYS_REMAINING дней до оплаты proxy."
 fi
