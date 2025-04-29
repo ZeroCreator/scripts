@@ -80,7 +80,7 @@ message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
 
 5️⃣.  Формат времени:
 
-получить текущую дату в формате "YYYY-MM-DD h:m:s"
+получить текущую дату в формате "YYYY-MM-DD H:M:S"
 
 `$(date '+%Y-%m-%d %H:%M:%S')`
 

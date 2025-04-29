@@ -34,6 +34,7 @@ else
     echo "Файл конфигурации $CONFIG_FILE не найден." >&2
     exit 1
 fi
+
 # Проверка обязательных переменных
 : "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
 : "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
@@ -59,8 +60,14 @@ send_telegram_message() {
 # Отправка содержимого лог-файла в Telegram
 if [ -f "$LOG_FILE" ]; then
     last_line=""  # Переменная для хранения последней строки
+    error_found=false  # Флаг для отслеживания наличия ошибки
+
     while IFS= read -r line; do
         last_line="$line"  # Сохраняем последнюю строку
+        # Проверяем наличие сообщения об ошибке
+        if [[ "$line" == *"Ошибка при перезапуске контейнера"* ]]; then
+            error_found=true
+        fi
     done < "$LOG_FILE"
 
     log_date=$(echo "$last_line" | awk '{print $1}')  # Извлекаем дату из первой колонки
@@ -73,10 +80,16 @@ if [ -f "$LOG_FILE" ]; then
         warning_message=$(echo -e "$warning_message" | sed 's/[_*`.,-]/\\&/g')
         send_telegram_message "$warning_message"
     else
-        message_content="ℹ️ Последняя запись в логе контейнера \n$CONTAINER_NAME ➡️ \n$last_line"
-        # Экранирование символов для MarkdownV2
-        message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
-        send_telegram_message "$message_content"
+        # Если последняя запись в логе — ошибка, отправляем её в Telegram
+        if $error_found; then
+            message_content="ℹ️ $last_line"
+            # Экранирование символов для MarkdownV2
+            message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
+            send_telegram_message "$message_content"
+        else
+            # Если нет ошибок, просто логируем
+            echo "$last_line"
+        fi
     fi
 else
     echo "$(date) Лог-файл $LOG_FILE не найден."
