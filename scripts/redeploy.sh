@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #--------------------------------------------------------------------
 # Script to Deployment Projects
@@ -26,6 +26,30 @@
 # CONFIG_FILE
 
 
+# Активируем строгий режим (но с осторожностью для SSH_AUTH_SOCK)
+set -eEo pipefail
+
+# Загружаем конфиг
+CONFIG_FILE="${1:-config}"
+source "$CONFIG_FILE" || {
+    echo "❌ Failed to load config file"
+    exit 1
+}
+
+# --- Исправленный блок с SSH-агентом ---
+set +u  # Временно разрешаем неопределённые переменные
+if [ -z "${SSH_AUTH_SOCK:-}" ]; then
+    echo "🔄 Запускаем SSH-агент..."
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_rsa || {
+        echo "❌ Не удалось добавить SSH-ключ"
+        exit 1
+    }
+    export SSH_AUTH_SOCK
+fi
+set -u  # Возвращаем строгий режим
+# --------------------------------------
+
 # Проверка наличия аргумента
 if [ "$#" -ne 1 ]; then
     echo "Использование: $0 путь_к_конфигурационному_файлу" >&2
@@ -43,11 +67,12 @@ else
 fi
 
 # Проверка обязательных переменных
-: "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
-: "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
-: "${WORKDIR:?Переменная WORKDIR не задана}"
-: "${DOCKER_REGISTRY:?Переменная DOCKER_REGISTRY не задана}"
-: "${PROJECT_NAME:?Переменная PROJECT_NAME не задана}"
+for var in TELEGRAM_TOKEN TELEGRAM_CHAT_ID WORKDIR DOCKER_REGISTRY PROJECT_NAME; do
+    if [ -z "${!var}" ]; then
+        echo "Переменная $var не задана" >&2
+        exit 1
+    fi
+done
 
 # Функция для отправки сообщения в Telegram
 send_telegram_message() {
@@ -58,98 +83,94 @@ send_telegram_message() {
          -d parse_mode="Markdown"
 }
 
-# Функция для вывода сообщений об ошибках
-error_exit() {
-    echo "Ошибка: $1" >&2
+# Инициализация лог-файла
+LOG_FILE="${LOGDIR:-/tmp}/${PROJECT_NAME}_$(date '+%Y%m%d_%H%M%S').log"
+exec 3>&1 4>&2
+exec > >(tee -a "${LOG_FILE}") 2>&1
+
+# Функция обработки ошибок
+handle_error() {
+    local exit_code=$?
+    local line_number=$1
+    local command=$2
+
+    error_message="❌ [Сбой] Проект: ${PROJECT_NAME}
+Ошибка в строке ${line_number}: ${command}
+Код ошибки: ${exit_code}
+Директория: $(pwd)
+Время: $(date '+%Y-%m-%d %H:%M:%S')
+Логи: ${LOG_FILE}"
+
+    echo "${error_message}" >&2
+    send_telegram_message "${error_message}"
+    exit ${exit_code}
+}
+
+# Устанавливаем обработчики ошибок
+trap 'handle_error ${LINENO} "${BASH_COMMAND}"' ERR
+set -eEuo pipefail
+
+# Основной код скрипта
+echo "-*-*-*-START-*-*-*-"
+send_telegram_message "ℹ️ Запуск скрипта проекта ${PROJECT_NAME}: $(date '+%Y-%m-%d %H:%M:%S')"
+
+echo "Скрипт запущен: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "Переходим в директорию ${WORKDIR}"
+
+cd "${WORKDIR}" || {
+    error_msg="❌ Не удалось перейти в директорию ${WORKDIR}"
+    echo "${error_msg}" >&2
+    send_telegram_message "${error_msg}"
     exit 1
 }
 
-# Функция для вывода звездочек:
-print_stars() {
-    for i in {1..2}; do
-        echo "*"
-    done
-}
+echo "Директория изменена на: $(pwd)"
 
-print_stars
-echo "-*-*-*-START-*-*-*-"
-send_telegram_message "ℹ️  Запуск скрипта проекта $PROJECT_NAME: $(date '+%Y-%m-%d %H:%M:%S')"
-print_stars
+# Переименование образа
+IMAGE_ID=$(docker images -q "${DOCKER_REGISTRY}/${PROJECT_NAME}:latest")
+if [ -n "${IMAGE_ID}" ]; then
+    CREATION_DATE=$(docker inspect --format='{{.Created}}' "${IMAGE_ID}")
+    NEW_TAG="${DOCKER_REGISTRY}/${PROJECT_NAME}:$(date -d "${CREATION_DATE}" '+%Y-%m-%d-%H-%M-%S')"
 
-# Вывод даты и времени начала выполнения скрипта
-echo "Скрипт запущен: $(date '+%Y-%m-%d %H:%M:%S')"
-print_stars
-
-# Переход в директорию
-echo "Переходим в директорию $WORKDIR:"
-echo "Текущая директория: $(pwd)"
-echo "Содержимое родительской директории: $(ls ..)"
-
-cd $WORKDIR || error_exit "Не удалось перейти в директорию $WORKDIR"
-
-echo "Перешли в директорию $WORKDIR."
-print_stars
-
-# Получение ID образа с тегом latest
-IMAGE_ID=$(docker images -q $DOCKER_REGISTRY/$PROJECT_NAME:latest)
-
-if [ -n "$IMAGE_ID" ]; then
-    # Получение даты создания образа
-    CREATION_DATE=$(docker inspect --format='{{.Created}}' $IMAGE_ID)
-
-    # Преобразование даты создания в формат "YYYY-MM-DD H:M:S"
-    CREATION_DATE_FORMATTED=$(date -d "$CREATION_DATE" "+%Y-%m-%d-%H-%M-%S")
-
-    # Создание нового тега с датой создания
-    NEW_TAG="$DOCKER_REGISTRY/$PROJECT_NAME:$CREATION_DATE_FORMATTED"
-
-    # Переименование образа с новым тегом
-    if docker tag $IMAGE_ID $NEW_TAG; then
-        echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest переименован в $NEW_TAG."
+    if docker tag "${IMAGE_ID}" "${NEW_TAG}"; then
+        echo "Образ переименован: ${NEW_TAG}"
     else
-        echo "Не удалось переименовать образ $DOCKER_REGISTRY/$PROJECT_NAME:latest."
+        echo "⚠️ Не удалось переименовать образ" >&2
     fi
-else
-  echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest не найден."
 fi
 
-# Сборка нового образа с тегом latest
-echo "Начинаем сборку образа $PROJECT_NAME:"
+# Сборка образа
+echo "Начинаем сборку образа ${PROJECT_NAME}"
+# Проверяем, запущен ли SSH-агент
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_rsa
+    export SSH_AUTH_SOCK
+fi
 
 if docker compose build; then
-    echo "Образ $PROJECT_NAME успешно собран."
-    send_telegram_message "ℹ️  Образ $PROJECT_NAME успешно собран."
+    echo "Сборка успешно завершена"
+    send_telegram_message "ℹ️ Образ ${PROJECT_NAME} успешно собран"
 else
-    error_exit "Ошибка при сборке образа $PROJECT_NAME."
-    send_telegram_message "❌ Ошибка при сборке образа $PROJECT_NAME."
+    error_msg="❌ Ошибка сборки образа ${PROJECT_NAME}"
+    echo "${error_msg}" >&2
+    send_telegram_message "${error_msg}"
     exit 1
 fi
-
-print_stars
 
 # Публикация образа
-echo "Публикуем образ $PROJECT_NAME в docker-registry:"
-
-if docker push $DOCKER_REGISTRY/$PROJECT_NAME:latest; then
-    echo "Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest успешно опубликован."
-    send_telegram_message "ℹ️  Образ $DOCKER_REGISTRY/$PROJECT_NAME:latest успешно опубликован."
+echo "Публикация образа ${DOCKER_REGISTRY}/${PROJECT_NAME}:latest"
+if docker push "${DOCKER_REGISTRY}/${PROJECT_NAME}:latest"; then
+    echo "Образ успешно опубликован"
+    send_telegram_message "ℹ️ Образ ${PROJECT_NAME} успешно опубликован"
 else
-    error_exit "Ошибка при публикации образа: $DOCKER_REGISTRY/$PROJECT_NAME:latest."
-    send_telegram_message "❌ Ошибка при публикации образа: $DOCKER_REGISTRY/$PROJECT_NAME:latest."
+    error_msg="❌ Ошибка публикации образа ${PROJECT_NAME}"
+    echo "${error_msg}" >&2
+    send_telegram_message "${error_msg}"
     exit 1
 fi
-print_stars
 
-# Вывод даты и времени завершения выполнения скрипта
-echo "Скрипт проекта $PROJECT_NAME завершен: $(date '+%Y-%m-%d %H:%M:%S')"
-print_stars
-
-echo "Скрипт выполнен успешно!"
-
-print_stars
-echo ":) END :)"
-send_telegram_message "✅ Скрипт проекта $PROJECT_NAME успешно выполнен: $(date '+%Y-%m-%d %H:%M:%S')!"
-print_stars
-
-# Логирование
-exec > >(tee -i "$LOGDIR/$PROJECT_NAME.logs") 2>&1
+# Успешное завершение
+send_telegram_message "✅ Скрипт проекта ${PROJECT_NAME} успешно выполнен: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "Скрипт завершен успешно"
+exit 0
