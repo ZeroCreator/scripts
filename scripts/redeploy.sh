@@ -148,7 +148,7 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     export SSH_AUTH_SOCK
 fi
 
-if docker compose build; then
+if docker compose build --no-cache; then
     echo "Сборка успешно завершена"
     send_telegram_message "ℹ️ Образ ${PROJECT_NAME} успешно собран"
 else
