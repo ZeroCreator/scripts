@@ -75,12 +75,32 @@ for var in TELEGRAM_TOKEN TELEGRAM_CHAT_ID WORKDIR DOCKER_REGISTRY PROJECT_NAME;
 done
 
 # Функция для отправки сообщения в Telegram
+# Функция для отправки сообщения в Telegram с повторными попытками
 send_telegram_message() {
     local message="$1"
-    curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
-         -d chat_id="$TELEGRAM_CHAT_ID" \
-         -d text="$message" \
-         -d parse_mode="Markdown"
+    local max_attempts=3
+    local attempt=1
+    local wait_time=5
+
+    while [ $attempt -le $max_attempts ]; do
+        if curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+             -d chat_id="$TELEGRAM_CHAT_ID" \
+             -d text="$message" \
+             -d parse_mode="Markdown" \
+             --connect-timeout 10 \
+             --max-time 30; then
+            echo "✅ Сообщение отправлено в Telegram (попытка $attempt)"
+            return 0
+        else
+            echo "⚠️ Ошибка отправки в Telegram (попытка $attempt), повтор через ${wait_time}с..."
+            sleep $wait_time
+            attempt=$((attempt + 1))
+            wait_time=$((wait_time * 2))  # Exponential backoff
+        fi
+    done
+
+    echo "❌ Не удалось отправить сообщение в Telegram после $max_attempts попыток"
+    return 1
 }
 
 # Инициализация лог-файла

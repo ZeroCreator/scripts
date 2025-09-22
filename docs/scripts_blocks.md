@@ -51,24 +51,33 @@ send_telegram_warning_message "$message_content"
 3️⃣.  Отправка telegram-сообщений с форматированием:
 
 ```bash
-# Функция для отправки сообщения в Telegram
+# Функция для отправки сообщения в Telegram с повторными попытками
 send_telegram_message() {
     local message="$1"
-    local url="https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
-    curl -s -X POST "$url" \
-            --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" \
-            --data-urlencode "text=$message" \
-            --data-urlencode "parse_mode=MarkdownV2"
+    local max_attempts=3
+    local attempt=1
+    local wait_time=5
+    
+    while [ $attempt -le $max_attempts ]; do
+        if curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+             -d chat_id="$TELEGRAM_CHAT_ID" \
+             -d text="$message" \
+             -d parse_mode="Markdown" \
+             --connect-timeout 10 \
+             --max-time 30; then
+            echo "✅ Сообщение отправлено в Telegram (попытка $attempt)"
+            return 0
+        else
+            echo "⚠️ Ошибка отправки в Telegram (попытка $attempt), повтор через ${wait_time}с..."
+            sleep $wait_time
+            attempt=$((attempt + 1))
+            wait_time=$((wait_time * 2))  # Exponential backoff
+        fi
+    done
+    
+    echo "❌ Не удалось отправить сообщение в Telegram после $max_attempts попыток"
+    return 1
 }
-
-# Переменная для хранения сообщений
-message_content=""
-
-# Экранирование символов для MarkdownV2
-message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
-
-# Отправка сообщения в Telegram
-send_telegram_message "$message_content"
 ```
 
 ---
