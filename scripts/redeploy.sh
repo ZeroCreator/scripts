@@ -29,14 +29,23 @@
 # Активируем строгий режим (но с осторожностью для SSH_AUTH_SOCK)
 set -eEo pipefail
 
-# Загружаем конфиг
-CONFIG_FILE="${1:-config}"
-source "$CONFIG_FILE" || {
-    echo "❌ Failed to load config file"
+# Проверка наличия аргумента ДО загрузки конфига
+if [ "$#" -ne 1 ]; then
+    echo "Использование: $0 путь_к_конфигурационному_файлу" >&2
     exit 1
-}
+fi
 
-# --- Исправленный блок с SSH-агентом ---
+CONFIG_FILE="$1"
+
+# Загрузка конфига один раз
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+else
+    echo "Файл конфигурации $CONFIG_FILE не найден." >&2
+    exit 1
+fi
+
+# --- Блок с SSH-агентом ---
 set +u  # Временно разрешаем неопределённые переменные
 if [ -z "${SSH_AUTH_SOCK:-}" ]; then
     echo "🔄 Запускаем SSH-агент..."
@@ -74,7 +83,6 @@ for var in TELEGRAM_TOKEN TELEGRAM_CHAT_ID WORKDIR DOCKER_REGISTRY PROJECT_NAME;
     fi
 done
 
-# Функция для отправки сообщения в Telegram
 # Функция для отправки сообщения в Telegram с повторными попытками
 send_telegram_message() {
     local message="$1"
@@ -100,7 +108,7 @@ send_telegram_message() {
     done
 
     echo "❌ Не удалось отправить сообщение в Telegram после $max_attempts попыток"
-    return 1
+    exit 1
 }
 
 # Инициализация лог-файла
