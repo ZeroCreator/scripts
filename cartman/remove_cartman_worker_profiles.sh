@@ -10,43 +10,18 @@
 # Developed by Olga Shkola in 2025
 #--------------------------------------------------------------------
 
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+source "$PROJECT_ROOT/lib/common.sh"
+load_env "$PROJECT_ROOT/config.env"
+load_env "$SCRIPT_DIR/.env"
+source "$PROJECT_ROOT/lib/telegram.sh"
+
 # Количество повторений
 REPEAT_COUNT=4
-
-# Проверка наличия аргумента
-if [ "$#" -ne 1 ]; then
-    echo "Использование: $0 путь_к_конфигурационному_файлу" >&2
-    exit 1
-fi
-
-CONFIG_FILE="$1"
-
-# Загрузка переменных из файла конфигурации
-if [ -f "$CONFIG_FILE" ]; then
-    . "$CONFIG_FILE"
-else
-    echo "Файл конфигурации $CONFIG_FILE не найден." >&2
-    exit 1
-fi
-# Проверка обязательных переменных
-: "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
-: "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
-
-# Проверка наличия переменной окружения с токеном Telegram
-if [ -z "$TELEGRAM_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
-    echo "Ошибка: Не установлены переменные окружения TELEGRAM_TOKEN или TELEGRAM_CHAT_ID." >&2
-    exit 1
-fi
-
-# Функция для отправки сообщения в Telegram
-send_telegram_message() {
-    local message="$1"
-    local url="https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
-    curl -s -X POST "$url" \
-            --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" \
-            --data-urlencode "text=$message" \
-            --data-urlencode "parse_mode=MarkdownV2"
-}
 
 # Переменная для хранения сообщений
 message_content=""
@@ -75,4 +50,4 @@ done
 message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
 
 # Отправка сообщения в Telegram
-send_telegram_message "$message_content"
+send_telegram_message "$message_content" "MarkdownV2"

@@ -7,55 +7,17 @@
 # Developed by Olga Shkola in 2025
 #--------------------------------------------------------------------
 
-# Переменные для запуска скрипта:
-# Токен и ID телеграм-канала ->
-# TELEGRAM_TOKEN
-# TELEGRAM_CHAT_ID
-# Путь до LOG_FILE ->
-# LOG_FILE="/path/to/logs/"
-# Название контейнера
-# CONTAINER_NAME
-# Конфигурационный файл, где хранятся все переменные ->
-# CONFIG_FILE
+set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Проверка наличия аргумента
-if [ "$#" -ne 1 ]; then
-    echo "Использование: $0 путь_к_конфигурационному_файлу" >&2
-    exit 1
-fi
+source "$PROJECT_ROOT/lib/common.sh"
+load_env "$PROJECT_ROOT/config.env"
+load_env "$SCRIPT_DIR/.env"
+source "$PROJECT_ROOT/lib/telegram.sh"
 
-CONFIG_FILE="$1"
-
-# Загрузка переменных из файла конфигурации
-if [ -f "$CONFIG_FILE" ]; then
-    . "$CONFIG_FILE"
-else
-    echo "Файл конфигурации $CONFIG_FILE не найден." >&2
-    exit 1
-fi
-
-# Проверка обязательных переменных
-: "${TELEGRAM_TOKEN:?Переменная TELEGRAM_TOKEN не задана}"
-: "${TELEGRAM_CHAT_ID:?Переменная TELEGRAM_CHAT_ID не задана}"
-: "${LOG_FILE:?Переменная LOG_FILE не задана}"
-: "${CONTAINER_NAME:?Переменная CONTAINER_NAME не задана}"
-
-# Проверка наличия переменной окружения с токеном Telegram
-if [ -z "$TELEGRAM_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
-    echo "Ошибка: Не установлены переменные окружения TELEGRAM_TOKEN или TELEGRAM_CHAT_ID." >&2
-    exit 1
-fi
-
-# Функция для отправки сообщения в Telegram
-send_telegram_message() {
-    local message="$1"
-    local url="https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
-    curl -s -X POST "$url" \
-            --data-urlencode "chat_id=$TELEGRAM_CHAT_ID" \
-            --data-urlencode "text=$message" \
-            --data-urlencode "parse_mode=MarkdownV2"
-}
+require_vars LOG_FILE CONTAINER_NAME
 
 # Отправка содержимого лог-файла в Telegram
 if [ -f "$LOG_FILE" ]; then
@@ -78,14 +40,14 @@ if [ -f "$LOG_FILE" ]; then
         warning_message="⚠️ Внимание! \nПоследняя запись в логе контейнера $CONTAINER_NAME была сделана \n$log_date, \nа не сегодня ➡️ \n($current_date)."
         # Экранирование символов для MarkdownV2
         warning_message=$(echo -e "$warning_message" | sed 's/[_*`.,-]/\\&/g')
-        send_telegram_message "$warning_message"
+        send_telegram_message "$warning_message" "MarkdownV2"
     else
         # Если последняя запись в логе — ошибка, отправляем её в Telegram
         if $error_found; then
             message_content="ℹ️ $last_line"
             # Экранирование символов для MarkdownV2
             message_content=$(echo -e "$message_content" | sed 's/[_*`.,-]/\\&/g')
-            send_telegram_message "$message_content"
+            send_telegram_message "$message_content" "MarkdownV2"
         else
             # Если нет ошибок, просто логируем
             echo "$last_line"

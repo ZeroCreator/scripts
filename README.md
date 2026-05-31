@@ -14,17 +14,27 @@ SSSSSSS    CCCCCC   R    R    IIIII   P           T     SSSSSSS
 ---
 ## 🛠 Подготовка к запуску и запуск
 
-Вначале необходимо создать в папке проекта файл **config.env** с переменными окружения (*при первой установке приложения*):
+Проект разделён на модули (папки). Общие переменные (например, Telegram) хранятся в корневом файле **`config.env`**, а переменные, специфичные для каждого модуля — в локальных **`.env`** внутри соответствующих папок.
+
+### 1. Общий конфиг `config.env` (в корне проекта)
+
+Содержит только общие переменные:
+
+```dotenv
+# TELEGRAM
+TELEGRAM_TOKEN="<telegram-token>"
+TELEGRAM_CHAT_ID="<telegram_chat_id>"
+```
+
+### 2. Локальные `.env` в папках проектов
+
+Пример для папки `cartman/.env`:
 
 ```dotenv
 # Переменные проекта
 WORKDIR=/path/to/project
 LOGDIR=/path/to/logs
 PROJECT_NAME=project_name
-
-# TELEGRAM
-TELEGRAM_TOKEN="<telegram-token>"
-TELEGRAM_CHAT_ID="<telegram_chat_id>"
 
 # Для скрипта redeploy
 DOCKER_REGISTRY="<docker-registry_url>"
@@ -41,10 +51,20 @@ MESSAGE="<message>"
 PAST_DATE="<past_date>"
 ```
 
+Пример для папки `ssk-scraper/.env`:
+
+```dotenv
+# Путь до проекта flat-parser
+FLAT_PARSER_DIR=/path/to/project
+
+# Scheduler tasks (JSON)
+SCHEDULER_TASKS='{...}'
+```
+
 ---
 ## 📝 Документация
 
-Документация проекта доступна в формате `mkdocs` на **GitHub**:
+📖 Документация проекта доступна в формате `mkdocs` на **GitHub**:
 
 ➡️ https://zerocreator.github.io/scripts/.
 
@@ -52,30 +72,30 @@ PAST_DATE="<past_date>"
 
 ### Локальное развертывание документации
 
+Документация построена на [MkDocs](https://www.mkdocs.org/) с темой [Material](https://squidfunk.github.io/mkdocs-material/).
+
 Для запуска интерфейса документации **локально** необходимо выполнить следующие команды:
 
-1️⃣.  Создать и активировать виртуальное окружение (*при первой установке приложения*):
+1️⃣.  Создать и активировать виртуальное окружение через `uv` (*при первой установке приложения*):
 
 ```bash
-$ python3 -m venv scripts_venv
+$ uv venv scripts_venv --clear
 $ source scripts_venv/bin/activate
 ```
 
 2️⃣.  Затем установить пакеты mkdocs (*при первой установке приложения*):
 
 ```bash
-$ cd scripts
-$ pip3 install mkdocs
-$ pip install mkdocs-material
+$ uv pip install mkdocs mkdocs-material
 ```
 
 3️⃣.  Запустить 📝 mkdocs:
 
 ```bash
-$ mkdocs serve
+$ uv run mkdocs serve --dev-addr 127.0.0.1:<PORT>
 ```
 
-Документация будет доступна **локально** по адресу http://localhost:8000
+Документация будет доступна **локально** по адресу `http://localhost:<PORT>`
 
 ---
 ### Сборка документации для **GitHub**:
@@ -106,7 +126,7 @@ $ mkdocs gh-deploy
 
 Примеры запуска скриптов с помощью утилиты **at**:
 ```bash
-$ echo "/path/to/scripts/script_name.sh /path/to/scripts/config.env >> /path/to/scripts/script_log.log 2>&1" | at <h>:<m> <YY>-<m>-<d>
+$ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2>&1" | at <h>:<m> <YY>-<m>-<d>
 ```
 
 Для просмотра запланированных задач можно использовать команду `atq`:

@@ -8,110 +8,94 @@ S         C         R     R     I     P     P     T     S
 SSSSSSS    CCCCCC   R    R    IIIII   P           T     SSSSSSS
 ``` 
 
-🚀 **Scripts** - пакет скриптов и документации для DevOps-сопровождения проектов.
+🚀 **Scripts** — монорепозиторий вспомогательных скриптов для DevOps-сопровождения проектов.
 
 ---
-⚠️ Все переменные окружения для работы скриптов лежат в `config.env` корневой папки `scripts`.
+
+## Модули
+
+| Модуль | Описание | Документация |
+|---|---|---|
+| `cartman/` | Скрипты деплоя, мониторинга и обслуживания проекта **Cartman** | [Cartman →](cartman.md) |
+| `ssk-scraper/` | Управление задачами парсера `flat-parser` | [SSK-Scraper →](ssk-scraper.md) |
+| `lib/` | Общие библиотеки: логирование, валидация, Telegram | [Libraries →](libraries.md) |
 
 ---
-🪛 Сделать скрипт исполняемым: ➡️
-```bash
-chmod +x <script_name>.sh
-```
+
+## Архитектура в двух словах
+
+- **Корневой `config.env`** — только общие переменные (`TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`).
+- **Локальный `.env` в каждой папке** — переменные конкретного модуля.
+- **`lib/common.sh`** — загрузка env, проверка переменных, логирование, обработка ошибок.
+- **`lib/telegram.sh`** — отправка сообщений в Telegram (с retry и backoff).
+- **Скрипты не принимают аргументов** — сами подключают библиотеки и загружают env.
+
+Подробнее — в разделе [Архитектура](architecture.md).
 
 ---
-🔌 **URL Format** для переменной **telegram**: ➡️
 
-`telegram://token@telegram?chats=channel-1[,chat-id-1,...]`
+## Быстрый старт
 
----
-✈️ Эмодзи, используемые для сообщений в telegram: ➡️
+### 1. Общий конфиг
 
-ℹ️ ⚠️ ❌ ✅ ✈️ 🤬 🔔 🚀
-
----
-## 📢 Команды для telegram:
-
-1️⃣.  🔬 Узнать **ID** канала: ➡️
-
-https://api.telegram.org/bot{TOKEN}/getUpdates
-
-2️⃣.  🏌️‍♀️ Отправка сообщений для тестирования: ➡️
-```bash
-curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" -d "chat_id=$CHAT_ID&text=$MESSAGE"
-curl -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" -d "chat_id=$CHAT_ID&text=Тестовое сообщение"
-```
-
-3️⃣.  👀 Смотреть логи в реальном времени: ➡️
-```bash
-$ tail -f ~/scripts/<script_name>.log
-```
-
-5️⃣.  👣 **Shoutrrr** - для просмотра доступных по **TELEGRAM_TOKEN** _telegram-каналов_: ➡️
-https://containrrr.dev/shoutrrr/v0.8/services/telegram/
-
-```bash
-$ docker run --rm -it containrrr/shoutrrr generate telegram
-```
-
----
-## 🛠 Подготовка к запуску и запуск
-
-Вначале необходимо создать в папке проекта файл **config.env** с переменными окружения (*при первой установке приложения*):
+Создать `config.env` в корне:
 
 ```dotenv
-# Переменные проекта
-WORKDIR=/path/to/project
-LOGDIR=/path/to/logs
-PROJECT_NAME=project_name
-
-# TELEGRAM
 TELEGRAM_TOKEN="<telegram-token>"
 TELEGRAM_CHAT_ID="<telegram_chat_id>"
+```
 
-# Для скрипта redeploy
-DOCKER_REGISTRY="<docker-registry_url>"
+### 2. Локальные `.env`
 
-# Для остальных скриптов
-LOG_FILE="/path/to/log.log"
-CONTAINER_NAME="<container_name>"
-TIMESTAMP_HOST_FILE="/path/to/project_timestamp_file.txt"
-TIME_DELTA=<time_delta>
+- `cartman/.env` — переменные Cartman ([шаблон](cartman.md))
+- `ssk-scraper/.env` — переменные SSK-Scraper ([шаблон](ssk-scraper.md))
 
-# Для proxy-scheduler
-DATE_FILE="/path/to/initial_date.txt"
-MESSAGE="<message>"
-PAST_DATE="<past_date>"
+### 3. Права на выполнение
+
+```bash
+chmod +x cartman/*.sh ssk-scraper/*.sh
+```
+
+### 4. Запуск
+
+```bash
+# Прямой запуск (аргументы не нужны)
+./cartman/redeploy.sh
+./ssk-scraper/run_erz_nashdom.sh
 ```
 
 ---
-## ⏰ Запуск скриптов по времени
 
-Для запуска скриптов по времени ипользуется **crontab** и утилита Linux **at**.
+## 📢 Telegram
 
-Примеры запуска скриптов с помощью утилиты **at**:
-```bash
-$ echo "/path/to/scripts/script_name.sh /path/to/scripts/config.env >> /path/to/scripts/script_log.log 2>&1" | at <h>:<m> <YY>-<m>-<d>
+**URL Format:** `telegram://token@telegram?chats=channel-1[,chat-id-1,...]`
+
+Эмодзи, используемые в сообщениях: ℹ️ ⚠️ ❌ ✅ ✈️ 🤬 🔔 🚀
+
+### Полезные команды
+
+**Узнать ID канала:**
+```
+https://api.telegram.org/bot{TOKEN}/getUpdates
 ```
 
-Для просмотра запланированных задач можно использовать команду `atq`:
+**Отправка тестового сообщения:**
 ```bash
-$ atq
+curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+  -d "chat_id=$TELEGRAM_CHAT_ID&text=Тест"
 ```
 
-Чтобы удалить запланированную задачу, используйте команду `atrm` с указанием номера задачи, который можно получить с помощью `atq`:
-```bash
-$ atrm 1
-```
-   
-Примеры запуска скриптов с помощью **crontab**:
+---
 
-Войти в crontab:
+## ⏰ Запуск по времени
+
+**`at`** — разовый запуск:
 ```bash
-$ crontab - e
+echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/log.log 2>&1" | at 18:26
 ```
 
-Запуск скрипта:
+**`crontab`** — регулярный запуск:
 ```bash
-30 2 * * * /path/to/your/script.sh || /path/to/send_telegram_message.sh "Cron job failed!"
+# Каждый день в 2:30
+30 2 * * * /path/to/scripts/cartman/redeploy.sh >> /path/to/log.log 2>&1
 ```
