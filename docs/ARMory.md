@@ -43,3 +43,15 @@ TELEGRAM_CHAT_ID="<telegram-chat-id>"
 - длинные сообщения автоматически разбиваются на части по 4000 символов;
 - ссылки не превращаются в превью (`disable_web_page_preview=true`);
 - путь к `.env` по умолчанию — `scripts/scripts/.env`.
+
+### `send_armory_task_list.py`
+
+Формирует список открытых задач из базы ARMory и отправляет его в Telegram через `send_armory_telegram.sh`. Вызывается планировщиком по задаче `armory-telegram`.
+
+**Переменные окружения:**
+- `ARMORY_DB_PATH` — путь к базе ARMory (по умолчанию `~/ARMory/data/armory.db`).
+
+**Запуск вручную:**
+```bash
+./scripts/ARMory/send_armory_task_list.py
+```
