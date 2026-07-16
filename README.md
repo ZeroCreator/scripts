@@ -8,57 +8,42 @@ S         C         R     R     I     P     P     T     S
 SSSSSSS    CCCCCC   R    R    IIIII   P           T     SSSSSSS
 ``` 
 
-🚀 **Scripts** - пакет скриптов и документации для DevOps-сопровождения проектов.
-
+🚀 **Scripts** — монорепозиторий вспомогательных скриптов для DevOps-сопровождения проектов.
 
 ---
 ## 🛠 Подготовка к запуску и запуск
 
-Проект разделён на модули (папки). Общие переменные (например, Telegram) хранятся в корневом файле **`config.env`**, а переменные, специфичные для каждого модуля — в локальных **`.env`** внутри соответствующих папок.
+Активные скрипты находятся в папке `scripts/`. Переменные окружения для них хранятся в едином файле **`scripts/scripts/.env`**.
 
-### 1. Общий конфиг `config.env` (в корне проекта)
+> Старые скрипты **Cartman** заархивированы в `archive/cartman/` и не используются в активных задачах. Для них по-прежнему нужны корневой `config.env` и локальный `archive/cartman/.env`.
 
-Содержит только общие переменные:
-
-```dotenv
-# TELEGRAM
-TELEGRAM_TOKEN="<telegram-token>"
-TELEGRAM_CHAT_ID="<telegram_chat_id>"
-```
-
-### 2. Локальные `.env` в папках проектов
-
-Пример для папки `cartman/.env`:
+### 1. Основной конфиг `scripts/scripts/.env`
 
 ```dotenv
-# Переменные проекта
-WORKDIR=/path/to/project
-LOGDIR=/path/to/logs
-PROJECT_NAME=project_name
+# Путь до проекта flat-parser (используется run_remote.sh)
+FLAT_PARSER_DIR=/path/to/flat-parser
 
-# Для скрипта redeploy
-DOCKER_REGISTRY="<docker-registry_url>"
-
-# Для остальных скриптов
-LOG_FILE="/path/to/log.log"
-CONTAINER_NAME="<container_name>"
-TIMESTAMP_HOST_FILE="/path/to/project_timestamp_file.txt"
-TIME_DELTA=<time_delta>
-
-# Для proxy-scheduler
-DATE_FILE="/path/to/initial_date.txt"
-MESSAGE="<message>"
-PAST_DATE="<past_date>"
-```
-
-Пример для папки `ssk-scraper/.env`:
-
-```dotenv
-# Путь до проекта flat-parser
-FLAT_PARSER_DIR=/path/to/project
+# Telegram (для send_armory_telegram.sh)
+TELEGRAM_BOT_TOKEN="<token>"
+TELEGRAM_CHAT_ID="<chat_id>"
 
 # Scheduler tasks (JSON)
 SCHEDULER_TASKS='{...}'
+```
+
+Шаблон — в файле `scripts/scripts/.env.example`.
+
+### 2. Права на выполнение
+
+```bash
+chmod +x scripts/ARMory/*.sh scripts/ssk-scraper/*.sh
+```
+
+### 3. Прямой запуск
+
+```bash
+./scripts/ssk-scraper/run_erz_nashdom.sh
+./scripts/ARMory/send_armory_telegram.sh /path/to/message.txt
 ```
 
 ---
@@ -122,11 +107,11 @@ $ mkdocs gh-deploy
 ---
 ## ⏰ Запуск скриптов по времени
 
-Для запуска скриптов по времени ипользуется **crontab** и утилита **at**.
+Для запуска скриптов по времени используется **crontab** и утилита **at**.
 
 Примеры запуска скриптов с помощью утилиты **at**:
 ```bash
-$ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2>&1" | at <h>:<m> <YY>-<m>-<d>
+$ echo "/path/to/scripts/ssk-scraper/run_erz_nashdom.sh >> /path/to/logs/erz_nashdom.log 2>&1" | at <h>:<m> <YY>-<m>-<d>
 ```
 
 Для просмотра запланированных задач можно использовать команду `atq`:
@@ -143,10 +128,10 @@ $ atrm 1
 
 Войти в crontab:
 ```bash
-$ crontab - e
+$ crontab -e
 ```
 
 Запуск скрипта:
 ```bash
-30 2 * * * /path/to/your/script.sh || /path/to/send_telegram_message.sh "Cron job failed!"
+30 2 * * * /path/to/your/script.sh || /path/to/scripts/ARMory/send_armory_telegram.sh "Cron job failed!"
 ```

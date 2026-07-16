@@ -16,19 +16,19 @@ SSSSSSS    CCCCCC   R    R    IIIII   P           T     SSSSSSS
 
 | Модуль | Описание | Документация |
 |---|---|---|
-| `cartman/` | Скрипты деплоя, мониторинга и обслуживания проекта **Cartman** | [Cartman →](cartman.md) |
-| `ssk-scraper/` | Управление задачами парсера `flat-parser` | [SSK-Scraper →](ssk-scraper.md) |
+| `scripts/ARMory/` | Отправка уведомлений ARMory в Telegram | [ARMory →](ARMory.md) |
+| `scripts/ssk-scraper/` | Управление задачами парсера `flat-parser` | [SSK-Scraper →](ssk-scraper.md) |
 | `lib/` | Общие библиотеки: логирование, валидация, Telegram | [Libraries →](libraries.md) |
+| `archive/cartman/` | **Архив.** Старые скрипты проекта Cartman | [Cartman (archive) →](cartman.md) |
 
 ---
 
 ## Архитектура в двух словах
 
-- **Корневой `config.env`** — только общие переменные (`TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`).
-- **Локальный `.env` в каждой папке** — переменные конкретного модуля.
+- **Единый `.env` в `scripts/scripts/.env`** — переменные для активных модулей (`FLAT_PARSER_DIR`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, `SCHEDULER_TASKS`).
 - **`lib/common.sh`** — загрузка env, проверка переменных, логирование, обработка ошибок.
 - **`lib/telegram.sh`** — отправка сообщений в Telegram (с retry и backoff).
-- **Скрипты не принимают аргументов** — сами подключают библиотеки и загружают env.
+- **Скрипты сами подключают библиотеки** и загружают нужный `.env`.
 
 Подробнее — в разделе [Архитектура](architecture.md).
 
@@ -36,32 +36,31 @@ SSSSSSS    CCCCCC   R    R    IIIII   P           T     SSSSSSS
 
 ## Быстрый старт
 
-### 1. Общий конфиг
+### 1. Основной конфиг
 
-Создать `config.env` в корне:
+Создать `scripts/scripts/.env` (шаблон — `scripts/scripts/.env.example`):
 
 ```dotenv
-TELEGRAM_TOKEN="<telegram-token>"
-TELEGRAM_CHAT_ID="<telegram_chat_id>"
+FLAT_PARSER_DIR=/path/to/flat-parser
+TELEGRAM_BOT_TOKEN="<token>"
+TELEGRAM_CHAT_ID="<chat_id>"
+SCHEDULER_TASKS='{...}'
 ```
 
-### 2. Локальные `.env`
-
-- `cartman/.env` — переменные Cartman ([шаблон](cartman.md))
-- `ssk-scraper/.env` — переменные SSK-Scraper ([шаблон](ssk-scraper.md))
-
-### 3. Права на выполнение
+### 2. Права на выполнение
 
 ```bash
-chmod +x cartman/*.sh ssk-scraper/*.sh
+chmod +x scripts/ARMory/*.sh scripts/ssk-scraper/*.sh
 ```
 
-### 4. Запуск
+### 3. Запуск
 
 ```bash
-# Прямой запуск (аргументы не нужны)
-./cartman/redeploy.sh
-./ssk-scraper/run_erz_nashdom.sh
+# Задача парсера
+./scripts/ssk-scraper/run_erz_nashdom.sh
+
+# Отправка сообщения от ARMory
+./scripts/ARMory/send_armory_telegram.sh /path/to/message.txt
 ```
 
 ---
@@ -81,7 +80,7 @@ https://api.telegram.org/bot{TOKEN}/getUpdates
 
 **Отправка тестового сообщения:**
 ```bash
-curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
   -d "chat_id=$TELEGRAM_CHAT_ID&text=Тест"
 ```
 
@@ -91,11 +90,11 @@ curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
 
 **`at`** — разовый запуск:
 ```bash
-echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/log.log 2>&1" | at 18:26
+echo "/path/to/scripts/ssk-scraper/run_erz_nashdom.sh >> /path/to/log.log 2>&1" | at 18:26
 ```
 
 **`crontab`** — регулярный запуск:
 ```bash
 # Каждый день в 2:30
-30 2 * * * /path/to/scripts/cartman/redeploy.sh >> /path/to/log.log 2>&1
+30 2 * * * /path/to/scripts/ssk-scraper/run_erz_nashdom.sh >> /path/to/log.log 2>&1
 ```

@@ -4,8 +4,9 @@ nav:
     - Home: index.md
     - Архитектура: architecture.md
     - Модули:
-        - Cartman: cartman.md
+        - ARMory: ARMory.md
         - SSK-Scraper: ssk-scraper.md
+        - Cartman (archive): cartman.md
     - Разработка:
         - Common Libraries: libraries.md
         - Scripts Blocks: scripts_blocks.md

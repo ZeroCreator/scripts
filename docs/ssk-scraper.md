@@ -2,13 +2,15 @@
 
 Модуль для управления задачами парсера `flat-parser` (скрейпинг недвижимости).
 
+Активный код находится в `scripts/ssk-scraper/`. Ранее модуль располагался в корне репозитория; старая версия перемещена в архив.
+
 Большинство скриптов делегируют выполнение `run_remote.sh`, который переходит в директорию `flat-parser` и выполняет переданную команду локально.
 
 ---
 
 ## Переменные окружения
 
-Файл `ssk-scraper/.env`:
+Переменные задаются в едином файле `scripts/scripts/.env`:
 
 ```dotenv
 # Путь до проекта flat-parser
@@ -16,17 +18,20 @@ FLAT_PARSER_DIR=~/flat-parser
 
 # Scheduler tasks (JSON)
 SCHEDULER_TASKS='{
-  "erz-nashdom":       {"name": "ERZ + Наш.Дом.РФ Литеры + ПД",              "script": "run_erz_nashdom.sh"},
-  "trendagent":        {"name": "TrendAgent (ЖК + квартиры + отделка)",      "script": "run_trendagent.sh"},
-  "trendagent-flats":  {"name": "TrendAgent (только квартиры)",             "script": "run_trendagent_flats.sh"},
-  "installments":      {"name": "Рассрочки из Google Sheets",                "script": "run_installments.sh"},
-  "prodoma":           {"name": "Отчёты Продома.Дом.РФ",                     "script": "run_prodoma.sh"},
-  "daily-report":      {"name": "Ежедневный отчёт в Telegram",               "script": "run_daily_report.sh"},
-  "dogma":             {"name": "Dogma — парсинг и рассылка XLSX",           "script": "run_dogma.sh"},
-  "docker-up":         {"name": "🟢 Docker up (trendagent-worker)",         "script": "docker_up.sh"},
-  "docker-down":       {"name": "🔴 Docker down (trendagent-worker)",       "script": "docker_down.sh"}
+  "erz-nashdom":       {"name": "ERZ + Наш.Дом.РФ Литеры + ПД",              "script": "ssk-scraper/run_erz_nashdom.sh"},
+  "trendagent":        {"name": "TrendAgent (ЖК + квартиры + отделка)",      "script": "ssk-scraper/run_trendagent.sh"},
+  "trendagent-flats":  {"name": "TrendAgent (только квартиры)",             "script": "ssk-scraper/run_trendagent_flats.sh"},
+  "installments":      {"name": "Рассрочки из Google Sheets",                "script": "ssk-scraper/run_installments.sh"},
+  "prodoma":           {"name": "Отчёты Продома.Дом.РФ",                     "script": "ssk-scraper/run_prodoma.sh"},
+  "daily-report":      {"name": "Ежедневный отчёт в Telegram",               "script": "ssk-scraper/run_daily_report.sh"},
+  "dogma":             {"name": "Dogma — парсинг и рассылка XLSX",           "script": "ssk-scraper/run_dogma.sh"},
+  "docker-up":         {"name": "🟢 Docker up (trendagent-worker)",         "script": "ssk-scraper/docker_up.sh"},
+  "docker-down":       {"name": "🔴 Docker down (trendagent-worker)",       "script": "ssk-scraper/docker_down.sh"},
+  "armory-telegram":   {"name": "📨 ARMory: список задач в Telegram",        "script": "ARMory/send_armory_telegram.sh"}
 }'
 ```
+
+Пути в `script` задаются относительно каталога `scripts/scripts/`, так как ARMory использует `SCRIPTS_PROJECT_PATHS=~/scripts/scripts`.
 
 ---
 
@@ -34,10 +39,10 @@ SCHEDULER_TASKS='{
 
 ### `run_remote.sh`
 
-Базовый скрипт запуска команд внутри проекта `flat-parser`. Загружает `ssk-scraper/.env`, переходит в `FLAT_PARSER_DIR` и выполняет переданную команду.
+Базовый скрипт запуска команд внутри проекта `flat-parser`. Загружает `scripts/scripts/.env`, переходит в `FLAT_PARSER_DIR` и выполняет переданную команду.
 
 ```bash
-./run_remote.sh '<docker или celery команда>'
+./scripts/ssk-scraper/run_remote.sh '<docker или celery команда>'
 ```
 
 ### `run_dogma.sh`
@@ -45,7 +50,7 @@ SCHEDULER_TASKS='{
 Запускает парсинг и рассылку Dogma напрямую, без использования `run_remote.sh`.
 
 ```bash
-./run_dogma.sh
+./scripts/ssk-scraper/run_dogma.sh
 ```
 
 Выполняемая команда:

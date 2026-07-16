@@ -85,13 +85,14 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-source "$PROJECT_ROOT/lib/common.sh"
-load_env "$PROJECT_ROOT/config.env"
-load_env "$SCRIPT_DIR/.env"
-source "$PROJECT_ROOT/lib/telegram.sh"
+source "$PROJECT_ROOT/../lib/common.sh"
+load_env "$PROJECT_ROOT/.env"
+source "$PROJECT_ROOT/../lib/telegram.sh"
 
 require_vars MY_VAR1 MY_VAR2
 
 log_with_timestamp "Старт"
 send_telegram_message "ℹ️ Скрипт запущен"
 ```
+
+> `$PROJECT_ROOT/.env` — единый конфиг активных скриптов (`scripts/scripts/.env`). Архивные модули используют корневой `config.env` и локальный `.env` модуля.

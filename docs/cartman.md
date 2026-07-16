@@ -1,3 +1,5 @@
+> **Архив.** Модуль Cartman больше не используется в активных задачах. Скрипты сохранены в `archive/cartman/` для истории.
+
 # Cartman 🚀
 
 Модуль скриптов для DevOps-сопровождения проекта **Cartman**.
@@ -6,7 +8,7 @@
 
 ## Переменные окружения
 
-Файл `cartman/.env`:
+Файл `archive/cartman/.env`:
 
 ```dotenv
 # Переменные проекта
@@ -48,7 +50,7 @@ PAST_DATE="2025-03-19"
 
 **Пример `at`:**
 ```bash
-echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2>&1" | at 18:26 2025-03-24
+echo "/path/to/archive/cartman/redeploy.sh >> /path/to/archive/cartman_log.log 2>&1" | at 18:26 2025-03-24
 ```
 
 ---
@@ -64,7 +66,7 @@ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2
 
 **Пример `crontab`:**
 ```bash
-0 9 * * * /path/to/cartman/check_telegram_messages.sh >> /path/to/cartman/check_telegram_messages.log 2>&1
+0 9 * * * /path/to/archive/cartman/check_telegram_messages.sh >> /path/to/archive/cartman/check_telegram_messages.log 2>&1
 ```
 
 ---
@@ -77,7 +79,7 @@ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2
 
 **Пример `crontab`:**
 ```bash
-0 6 * * * /path/to/cartman/restart_docker_container.sh >> /path/to/cartman/restart_docker_container.log 2>&1
+0 6 * * * /path/to/archive/cartman/restart_docker_container.sh >> /path/to/archive/cartman/restart_docker_container.log 2>&1
 ```
 
 ---
@@ -90,7 +92,7 @@ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2
 
 **Пример `crontab`:**
 ```bash
-0 6 * * * /path/to/cartman/restart_cartman_worker.sh >> /path/to/cartman/restart_cartman_worker.log 2>&1
+0 6 * * * /path/to/archive/cartman/restart_cartman_worker.sh >> /path/to/archive/cartman/restart_cartman_worker.log 2>&1
 ```
 
 ---
@@ -103,7 +105,7 @@ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2
 
 **Пример `crontab`:**
 ```bash
-0 6 * * * /path/to/cartman/telegram_send_logs.sh >> /path/to/cartman/telegram_send_logs.log 2>&1
+0 6 * * * /path/to/archive/cartman/telegram_send_logs.sh >> /path/to/archive/cartman/telegram_send_logs.log 2>&1
 ```
 
 ---
@@ -118,7 +120,7 @@ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2
 
 **Пример `crontab`:**
 ```bash
-0 * * * * /path/to/cartman/remove_cartman_worker_profiles.sh >> /path/to/cartman/remove_cartman_worker_profiles.log 2>&1
+0 * * * * /path/to/archive/cartman/remove_cartman_worker_profiles.sh >> /path/to/archive/cartman/remove_cartman_worker_profiles.log 2>&1
 ```
 
 ---
@@ -133,5 +135,5 @@ echo "/path/to/scripts/cartman/redeploy.sh >> /path/to/scripts/cartman_log.log 2
 
 **Пример `crontab`:**
 ```bash
-0 10 * * * /path/to/cartman/proxy_scheduler.sh >> /path/to/cartman/proxy_scheduler.log 2>&1
+0 10 * * * /path/to/archive/cartman/proxy_scheduler.sh >> /path/to/archive/cartman/proxy_scheduler.log 2>&1
 ```
