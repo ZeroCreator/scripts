@@ -29,6 +29,7 @@ load_env "$ENV_FILE"
 # ARMory использует TELEGRAM_BOT_TOKEN, общая библиотека — TELEGRAM_TOKEN
 TOKEN="${TELEGRAM_BOT_TOKEN:-${TELEGRAM_TOKEN:-}}"
 CHAT_ID="${TELEGRAM_CHAT_ID:-}"
+TELEGRAM_PROXY_URL="${TELEGRAM_PROXY_URL:-${PROXY_ADDRESS:-}}"
 
 require_vars TOKEN CHAT_ID
 
@@ -49,6 +50,9 @@ send_chunk() {
         --data-urlencode "text=${text}"
         -d "disable_web_page_preview=true"
     )
+    if [ -n "$TELEGRAM_PROXY_URL" ]; then
+        curl_opts+=(--proxy "$PROXY_URL")
+    fi
     if [ -n "$PARSE_MODE" ]; then
         curl_opts+=(-d "parse_mode=${PARSE_MODE}")
     fi
